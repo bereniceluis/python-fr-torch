@@ -1,0 +1,5 @@
+dataset/*
+static/*
+model/backbones/resnet100_backbone.pth
+model/weights/yolov5s-face.pt
+model/__pycache__
