@@ -9,6 +9,7 @@ from xmlrpc.client import Boolean
 from sqlalchemy import null
 from torchvision import transforms
 from threading import Thread
+from model_arch.backbones import get_model
 from model_arch.backbones.iresnet import iresnet100
 from model_arch.yolov5_face.models.experimental import attempt_load
 from model_arch.yolov5_face.utils.datasets import letterbox
@@ -25,7 +26,7 @@ class FaceRecognitionTrainer:
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.face_detection_model = attempt_load("model_arch/weights/yolov5s-face.pt")
         self.face_embedding_model = iresnet100()
-        self.face_embedding_model.load_state_dict(torch.load("model_arch/weights/resnet100_backbone.pth", map_location=self.device))
+        self.face_embedding_model.load_state_dict(torch.load("model_arch/backbones/resnet100_backbone.pth", map_location=self.device))
         self.face_embedding_model.to(self.device)
         self.face_embedding_model.eval()
         self.face_preprocess = transforms.Compose([
