@@ -4,3 +4,4 @@ model_arch/backbones/resnet100_backbone.pth
 model_arch/weights/yolov5s-face.pt
 model_arch/weights/yolov5m-face.pt
 model_arch/__pycache__
+face_recognition.py

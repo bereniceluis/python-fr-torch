@@ -1,5 +1,6 @@
-import sys
+import sys, warnings
 sys.path.insert(0, "yolov5_face")
+warnings.filterwarnings("ignore")
 
 import argparse
 import numpy as np
@@ -7,20 +8,27 @@ import os
 import cv2
 import shutil
 import torch
-from concurrent.futures import thread
-from xmlrpc.client import Boolean
-from sqlalchemy import null
+
 from torchvision import transforms
-from threading import Thread
 from model_arch.backbones import get_model
 from model_arch.backbones.iresnet import iresnet100
-from model_arch.yolov5_face.models.experimental import attempt_load
-from model_arch.yolov5_face.utils.datasets import letterbox
-from model_arch.yolov5_face.utils.general import check_img_size, non_max_suppression_face, scale_coords
+from yolov5_face.models.experimental import attempt_load
+from yolov5_face.utils.datasets import letterbox
+from yolov5_face.utils.general import check_img_size, non_max_suppression_face, scale_coords
 
 class FaceRecognitionTrainer:
-
     def __init__(self, full_train_dir, add_train_dir, faces_save_dir, feat_save_dir, is_add_user):
+        """
+        Initialize the FaceRecognitionTrainer class.
+
+        Args:
+            full_train_dir (str): Directory containing full training data.
+            add_train_dir (str): Directory containing additional training data.
+            faces_save_dir (str): Directory to save face datasets.
+            feat_save_dir (str): Directory to save face embeddings.
+            is_add_user (bool): Mode: add user or full training.
+        """
+        
         self.full_train_dir = full_train_dir
         self.add_train_dir = add_train_dir
         self.faces_save_dir = faces_save_dir
@@ -41,6 +49,13 @@ class FaceRecognitionTrainer:
     def resize_image(self, img0, img_size):
         """
         Resize the image while maintaining aspect ratio and applying letterboxing.
+
+        Args:
+            img0 (numpy.ndarray): Input image as a NumPy array.
+            img_size (int): Target image size.
+
+        Returns:
+            torch.Tensor: Resized and preprocessed image as a PyTorch tensor.
         """
         h0, w0 = img0.shape[:2]  # orig hw
         r = img_size / max(h0, w0)  # resize image to img_size
@@ -63,6 +78,12 @@ class FaceRecognitionTrainer:
     def detect_faces(self, input_image):
         """
         Detect faces in the input image using the YOLOv5 face detection model.
+
+        Args:
+            input_image (numpy.ndarray): Input image as a NumPy array.
+
+        Returns:
+            numpy.ndarray: Detected bounding boxes of faces.
         """
         size_convert = 256
         conf_thres = 0.4
@@ -81,6 +102,13 @@ class FaceRecognitionTrainer:
     def extract_face_embedding(self, face_image, training=True):
         """
         Extract the face embedding (feature vector) from the face image using the ResNet-100 backbone model.
+
+        Args:
+            face_image (numpy.ndarray): Face image as a NumPy array.
+            training (bool): Flag indicating whether the model is used for training or inference.
+
+        Returns:
+            numpy.ndarray: Face embedding (feature vector).
         """
         face_image = cv2.cvtColor(face_image, cv2.COLOR_BGR2RGB)
         face_image = self.face_preprocess(face_image).to(self.device)
@@ -97,6 +125,12 @@ class FaceRecognitionTrainer:
     def read_features(self, root_feature_path):
         """
         Read the saved face embeddings and associated image names from a file.
+
+        Args:
+            root_feature_path (str): Path to the root feature file.
+
+        Returns:
+            tuple: Tuple containing the loaded image names and embeddings, or None if the file is not found.
         """
         try:
             data = np.load(root_feature_path + ".npz", allow_pickle=True)
@@ -167,6 +201,9 @@ class FaceRecognitionTrainer:
     def parse_opt():
         """
         Parse command line arguments.
+
+        Returns:
+            argparse.Namespace: Parsed command line arguments.
         """
         parser = argparse.ArgumentParser()
         parser.add_argument('--full-train-dir', type=str, default='./dataset/trained-data/',
@@ -175,7 +212,7 @@ class FaceRecognitionTrainer:
                             help='Directory containing additional training data')
         parser.add_argument('--faces-save-dir', type=str, default='./dataset/face-datasets/',
                             help='Directory to save face datasets')
-        parser.add_argument('--feat-save-dir', type=str, default='./static/facial_emb',
+        parser.add_argument('--feat-save-dir', type=str, default='./static/facial_embeddings',
                             help='Directory to save face embeddings')
         parser.add_argument('--is-add-user', type=bool, default=True, help='Mode: add user or full training')
 
@@ -186,6 +223,9 @@ class FaceRecognitionTrainer:
     def main(opt):
         """
         Main function to instantiate the FaceRecognitionTrainer class and start the training process.
+
+        Args:
+            opt (argparse.Namespace): Parsed command line arguments.
         """
         trainer = FaceRecognitionTrainer(
             opt.full_train_dir,
@@ -195,7 +235,6 @@ class FaceRecognitionTrainer:
             opt.is_add_user
         )
         trainer.training()
-
 
 if __name__ == "__main__":
     opt = FaceRecognitionTrainer.parse_opt()
