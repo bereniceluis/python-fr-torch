@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(0, "yolov5_face")
+
 import argparse
 import numpy as np
 import os
@@ -24,7 +27,7 @@ class FaceRecognitionTrainer:
         self.feat_save_dir = feat_save_dir
         self.is_add_user = is_add_user
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.face_detection_model = attempt_load("model_arch/weights/yolov5s-face.pt")
+        self.face_detection_model = attempt_load("model_arch/weights/yolov5m-face.pt")
         self.face_embedding_model = iresnet100()
         self.face_embedding_model.load_state_dict(torch.load("model_arch/backbones/resnet100_backbone.pth", map_location=self.device))
         self.face_embedding_model.to(self.device)
@@ -119,6 +122,10 @@ class FaceRecognitionTrainer:
 
         for name_person in os.listdir(source):
             person_image_path = os.path.join(source, name_person)
+
+            # split folder name into last name and first name
+            last_name, first_name = name_person.split("_")
+
             person_face_path = os.path.join(self.faces_save_dir, name_person)
             os.makedirs(person_face_path, exist_ok=True)
 
@@ -137,7 +144,7 @@ class FaceRecognitionTrainer:
 
                         cv2.imwrite(path_save_face, face_image)
                         images_emb.append(self.extract_face_embedding(face_image, training=True))
-                        images_name.append(name_person)
+                        images_name.append(f"{first_name.capitalize()} {last_name.capitalize()}")
 
         images_emb = np.array(images_emb)
         images_name = np.array(images_name)
