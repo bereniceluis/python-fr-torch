@@ -18,7 +18,7 @@ Download weights
 | backbone.pth              | iresnet100          | for feature extraction with arcface loss function. save in backbones folder    | [File](https://drive.google.com/file/d/1TVfnDTCYa1bS9Yat-h2SAos0qjAwN3vI/view?usp=drive_link)| 249.1 MB |
 | yolov5m-face.pt           | YOLO5-CSPNet        | used for face detection. save in weights folder                                | [File](https://drive.google.com/file/d/1bP86MtZNFQ-c8dgYf_-UuGAthnzSdmFr/view?usp=drive_link)| 161.3 MB |
 | yolov5s-face.pt           | YOLO5-CSPNet        | used for face detection, but much smaller in size. save in weights folder      | [File](https://drive.google.com/file/d/11oKjCKTVVTXqX5T9GJ9mdPAxCu9eZS2S/view?usp=drive_link)| 54.4 MB  |
-| features.npz              |                     | extracted face feature embeddings. create a static folder and put the npz file | [File](https://drive.google.com/file/d/1axTRUC0_-NVKWkBseS66RKRZVYQQzmCQ/view?usp=drive_link)| 1.2 MB   |  
+| features.npz              |                     | extracted face feature embeddings. create a static folder and put the npz file | [File](https://drive.google.com/file/d/1IDO2YmtWMhgUdhfczsEIKGDTRN0N3auA/view?usp=drive_link)| 1.2 MB   |  
 
 Overall directory structure
 
@@ -53,8 +53,7 @@ Overall directory structure
 ```
 
 ## Training
-For adding another person.  
-  
+
 Create folders inside the add-train-data folder
 ```
 ├── dataset                      

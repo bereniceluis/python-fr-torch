@@ -6,4 +6,8 @@ model_arch/insightface/__pycache__
 model_arch/weights/yolov5s-face.pt
 model_arch/weights/yolov5m-face.pt
 model_arch/__pycache__
+<<<<<<< HEAD
 fr-copy.py
+=======
+__pycache__
+>>>>>>> 7b7ee09ccd66b7b6547868033c5f453b7d1265ca
