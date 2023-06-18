@@ -196,6 +196,8 @@ class FaceRecognitionTrainer:
             for sub_dir in os.listdir(self.add_train_dir):
                 dir_to_move = os.path.join(self.add_train_dir, sub_dir)
                 shutil.move(dir_to_move, self.full_train_dir, copy_function=shutil.copytree)
+        
+        print("Updated features successfully")
 
     @staticmethod
     def parse_opt():
