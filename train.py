@@ -37,7 +37,7 @@ class FaceRecognitionTrainer:
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.face_detection_model = attempt_load("model_arch/weights/yolov5m-face.pt")
         self.face_embedding_model = iresnet100()
-        self.face_embedding_model.load_state_dict(torch.load("model_arch/backbones/resnet100_backbone.pth", map_location=self.device))
+        self.face_embedding_model.load_state_dict(torch.load("model_arch/backbones/backbone.pth", map_location=self.device))
         self.face_embedding_model.to(self.device)
         self.face_embedding_model.eval()
         self.face_preprocess = transforms.Compose([
@@ -212,7 +212,7 @@ class FaceRecognitionTrainer:
                             help='Directory containing additional training data')
         parser.add_argument('--faces-save-dir', type=str, default='./dataset/face-datasets/',
                             help='Directory to save face datasets')
-        parser.add_argument('--feat-save-dir', type=str, default='./static/facial_embeddings',
+        parser.add_argument('--feat-save-dir', type=str, default='./static/features',
                             help='Directory to save face embeddings')
         parser.add_argument('--is-add-user', type=bool, default=True, help='Mode: add user or full training')
 

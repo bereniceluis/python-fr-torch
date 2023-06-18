@@ -1,7 +1,8 @@
 dataset/*
 static/*
-model_arch/backbones/resnet100_backbone.pth
+model_arch/backbones/backbone.pth
+model_arch/backbones/__pycache__
+model_arch/insightface/__pycache__
 model_arch/weights/yolov5s-face.pt
 model_arch/weights/yolov5m-face.pt
 model_arch/__pycache__
-face_recognition.py
