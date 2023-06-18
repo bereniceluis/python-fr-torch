@@ -6,3 +6,4 @@ model_arch/insightface/__pycache__
 model_arch/weights/yolov5s-face.pt
 model_arch/weights/yolov5m-face.pt
 model_arch/__pycache__
+__pycache__
