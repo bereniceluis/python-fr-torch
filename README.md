@@ -23,14 +23,14 @@ Download weights
 Overall directory structure
 
 ```
-├── dataset                      # For adding training dataset
+├── dataset                      # for training
 │   ├── add-train-data           # add photos
 │   ├── face-datasets            # all datasets are saved here
-│   └── trained-data             # all trasined datasets are saved here
+│   └── trained-data             # all trained datasets are saved here
 ├── model_arch                   # where models are saved
 │   ├── backbones # Model Weights
 │   │   ├── __init__.py
-│   │   ├── backbone.pth         # save the weights here
+│   │   ├── backbone.pth         # save the weight here
 │   │   └── iresnet.py           # resnet architecture
 ├── static
 │   ├── features.npz             # facial embeddings. will be used for similarity matching.
