@@ -74,6 +74,8 @@ Run in terminal
 ```
 python train.py --is-add-user=True
 ```
+Note: After training an .npz file will be saved inside the static folder.  
+
 Do face recognition
 ```
 python fr.py
