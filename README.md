@@ -53,8 +53,7 @@ Overall directory structure
 ```
 
 ## Training
-For adding another person.  
-  
+
 Create folders inside the add-train-data folder
 ```
 ├── dataset                      
