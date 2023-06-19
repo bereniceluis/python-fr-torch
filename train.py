@@ -143,18 +143,6 @@ class FaceRecognitionTrainer:
         except:
             return None
         
-    def fullname_labels(self):
-        """
-        Load the folder names and corresponding full names from the JSON file.
-
-        Returns:
-            dict: Dictionary mapping folder names to full names.
-        """
-        
-        with open("labels/names.json", "r") as file:
-            full_name = json.load(file)
-        return full_name
-
     def training(self):
         """
         Perform face recognition training by detecting faces in the images, extracting face embeddings,
