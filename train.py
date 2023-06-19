@@ -8,6 +8,7 @@ import os
 import cv2
 import shutil
 import torch
+import json
 
 from torchvision import transforms
 from model_arch.backbones import get_model
@@ -45,6 +46,7 @@ class FaceRecognitionTrainer:
             transforms.Resize((112, 112)),
             transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
         ])
+        self.fullname_labels = self.fullname_labels()
 
     def resize_image(self, img0, img_size):
         """
@@ -140,6 +142,18 @@ class FaceRecognitionTrainer:
             return images_name, images_emb
         except:
             return None
+        
+    def fullname_labels(self):
+        """
+        Load the folder names and corresponding full names from the JSON file.
+
+        Returns:
+            dict: Dictionary mapping folder names to full names.
+        """
+        
+        with open("labels/names.json", "r") as file:
+            full_name = json.load(file)
+        return full_name
 
     def training(self):
         """
@@ -148,17 +162,22 @@ class FaceRecognitionTrainer:
         """
         images_name = []
         images_emb = []
+        labels_dict = {}
 
         if self.is_add_user:
             source = self.add_train_dir
         else:
             source = self.full_train_dir
 
+        labels_path = "labels/names.json"  # Path to your JSON file
+        with open(labels_path) as f:
+            labels_dict = json.load(f)
+
         for name_person in os.listdir(source):
             person_image_path = os.path.join(source, name_person)
 
             # split folder name into last name and first name
-            last_name, first_name = name_person.split("_")
+            # last_name, first_name = name_person.split("_")
 
             person_face_path = os.path.join(self.faces_save_dir, name_person)
             os.makedirs(person_face_path, exist_ok=True)
@@ -178,7 +197,10 @@ class FaceRecognitionTrainer:
 
                         cv2.imwrite(path_save_face, face_image)
                         images_emb.append(self.extract_face_embedding(face_image, training=True))
-                        images_name.append(f"{first_name.capitalize()} {last_name.capitalize()}")
+                        folder_name = name_person.lower()
+                        label = label = labels_dict[folder_name] if folder_name in labels_dict else "Unknown"
+                        # images_name.append(f"{first_name.capitalize()} {last_name.capitalize()}")
+                        images_name.append(label)
 
         images_emb = np.array(images_emb)
         images_name = np.array(images_name)
@@ -226,7 +248,7 @@ class FaceRecognitionTrainer:
         """
         Main function to instantiate the FaceRecognitionTrainer class and start the training process.
 
-        Args:
+        Args: sdv2 
             opt (argparse.Namespace): Parsed command line arguments.
         """
         trainer = FaceRecognitionTrainer(
