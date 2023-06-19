@@ -1,4 +1,6 @@
 # python-fr-torch
+## Description
+Facial Recognition using Similarity Learning method
 
 ## Usage
 Clone repository
